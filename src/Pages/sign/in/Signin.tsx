@@ -12,6 +12,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import {Input} from "@/components/ui/input"
+import {Loader2} from "lucide-react";
 
 const formSchema = zod.object({
     phoneNumber: zod.string().length(10, {message: "your phone number must be 10 digits"}),
@@ -27,9 +28,11 @@ export default function SignIn() {
         },
     })
 
-    const onSubmit = (values: zod.infer<typeof formSchema>) => {
+    const onSubmit = async (values: zod.infer<typeof formSchema>) => {
         setIsLoading(true)
+        await new Promise(resolve => setTimeout(resolve, 2000))
         console.log(values)
+        setIsLoading(false)
     }
 
     return (
@@ -63,7 +66,12 @@ export default function SignIn() {
                                     </FormItem>
                             )}
                     />
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit">
+                        {isLoading ? (<>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+                                    Please wait </>
+                        ) : ("Sing in")}
+                    </Button>
                 </form>
             </Form>
     )
